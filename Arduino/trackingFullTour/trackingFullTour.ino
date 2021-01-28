@@ -576,17 +576,23 @@ void setup() {
   Serial1.begin(9600);
 
 
-//  // 前进，使横向中线对齐
-//  moveForwardToLine();
-//  delay(100);
-//
-//  delay(1000);
-//
-//  moveRightToLine();
-//  delay(1000);
-//
-//  turnRightToLine();
-//  delay(1000);
+  // 前进，使横向中线对齐
+  moveForwardToLine();
+  delay(100);
+
+  delay(1000);
+
+  moveRightToLine();
+  delay(1000);
+
+  turnRightToLine();
+  delay(1000);
+
+  moveForwardOnTrack(4050);
+  delay(1000);
+
+  
+  
 //
 //  // 前进，直到到达二维码的位置
 //  moveForwardOnTrack(10000);

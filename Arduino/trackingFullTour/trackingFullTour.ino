@@ -530,6 +530,16 @@ void moveForwardOnTrack(int steps)
   }
 }
 
+void normalstate()
+{
+  pwmServoControl(myServo1,25,106);
+  pwmServoControl(myServo2,25,58);
+  pwmServoControl(myServo3,25,25);
+  pwmServoControl(myServo4,25,0);
+  pwmServoControl(myServo5,25,94);
+  catchon();                         
+}
+
 void setup() {
   myServo0.attach(SERVO_PINcatch);    // 将10引脚与声明的舵机对象连接起来
   myServo1.attach(SERVO_PIN1);

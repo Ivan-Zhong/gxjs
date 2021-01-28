@@ -540,6 +540,15 @@ void normalstate()
   catchon();                         
 }
 
+
+void scanState()
+{
+  pwmServoControl(myServo5, 94, 33);
+  pwmServoControl(myServo2, 58, 160);
+  pwmServoControl(myServo3, 25, 80);
+  pwmServoControl(myServo4, 0, 85);
+}
+
 void setup() {
   myServo0.attach(SERVO_PINcatch);    // 将10引脚与声明的舵机对象连接起来
   myServo1.attach(SERVO_PIN1);
@@ -575,23 +584,23 @@ void setup() {
     pinMode(i, INPUT);
   Serial1.begin(9600);
 
-
   // 前进，使横向中线对齐
   moveForwardToLine();
-  delay(100);
-
-  delay(1000);
+  delay(500);
 
   moveRightToLine();
-  delay(1000);
+  delay(500);
 
   turnRightToLine();
-  delay(1000);
+  delay(500);
 
-  moveForwardOnTrack(4050);
-  delay(1000);
+  moveForwardOnTrack(4100);
+  delay(500);
 
-  
+  scanState();
+  delay(500);
+
+  //scanQRCode();
   
 //
 //  // 前进，直到到达二维码的位置

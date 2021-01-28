@@ -1,0 +1,312 @@
+#include <Servo.h>                // 声明调用Servo.h库
+Servo myservocatch;              //机械臂舵机，命名为myservocatch
+Servo myservo1;                  
+Servo myservo2; 
+Servo myservo3; 
+Servo myservo4;
+Servo myservoground;                                  
+
+#define  SERVO_PINcatch 8            //宏定义舵机控制引脚，命令为#define  舵机名字_PIN  端口 ;
+#define  SERVO_PIN1  9            //宏定义舵机控制引脚，命令为#define  舵机名字_PIN  端口 ;
+#define  SERVO_PIN2  10            //宏定义舵机控制引脚，命令为#define  舵机名字_PIN  端口 ;
+#define  SERVO_PIN3  11            //宏定义舵机控制引脚，命令为#define  舵机名字_PIN  端口 ;
+#define  SERVO_PIN4  12            //宏定义舵机控制引脚，命令为#define  舵机名字_PIN  端口 ;
+#define  SERVO_PINground 13            //宏定义舵机控制引脚，命令为#define  舵机名字_PIN  端口 ;
+                                                     
+
+ 
+unsigned int PWM=0;
+void PwmServoControl(Servo servo,int startangle,int endangle)
+{   //int a=servo.read()
+  if(startangle<=endangle)
+  {
+    servo.write(startangle);
+    delay(500);
+    servo.write(startangle);
+    delay(100);
+    for(PWM = startangle; PWM <endangle; PWM +=1)
+      {   
+        servo.write(PWM);   //给舵机写入PWM 
+        delay(20);      
+      }//延时10ms让舵机转到指定位置
+  }
+  else if(startangle>endangle)
+  {
+    servo.write(startangle);
+    delay(500);
+    servo.write(startangle);
+    delay(100);
+    for(PWM = startangle; PWM >endangle; PWM -=1)
+      {   
+        servo.write(PWM);   //给舵机写入PWM 
+        delay(20);      
+      }//延时10ms让舵机转到指定位置
+  }
+    
+}
+
+
+void myservo4control(int angle)//想让servo4转到位的角度；如果想在一个范围内旋转还可以增加函数咯口哦，
+{  
+  PwmServoControl(myservo4,angle,angle);
+}
+
+void myservo3control(int angle)
+{  
+  PwmServoControl(myservo3,angle,angle);
+}
+
+void myservo2control(int angle)
+{  
+  PwmServoControl(myservo2,angle,angle);
+}
+
+
+void myservo1control(int angle)
+{  
+  PwmServoControl(myservo1,angle,angle);
+}
+
+
+void myservogroundcontrol(int angle)//最底下那个基座
+{  
+  PwmServoControl(myservoground,angle,angle);
+}
+
+
+
+void catchon()      //张开爪子
+{PwmServoControl(myservocatch,110,160);}
+
+void catchoff()      //闭合爪子
+{PwmServoControl(myservocatch,160,110);}
+
+
+
+
+
+void normalstate(){       //初始状态
+
+  
+   myservo4control(180);
+   delay(500); 
+   myservo3control(30);
+   delay(500);
+   myservo2control(180);
+   delay(500);
+   myservo1control(90);
+   delay(500);
+   catchon();
+   delay(500);
+   catchoff();
+   delay(500);
+   myservogroundcontrol(45);
+   
+   
+   //PwmServoControl(myservo2,0,20);
+   //delay(500);                             
+}
+
+void catchControl(int state)
+{
+  if(state)
+    catchon();
+  else
+    catchoff();
+}
+
+// 左前方的电机 left front
+int lfCLK=45;
+int lfCW=44;
+int lfEN=43;
+// 右前方的电机 right front
+int rfCLK=39;
+int rfCW=38;
+int rfEN=37;
+// 左后方的电机 left rear
+int lrCLK=36;
+int lrCW=35;
+int lrEN=34;
+// 右后方的电机 right rear
+int rrCLK=42;
+int rrCW=41;
+int rrEN=40;
+
+void motorMove(int steps)
+{
+  for(int i = 0; i < steps; i++){
+    digitalWrite(rrCLK,HIGH);
+    digitalWrite(lrCLK,HIGH);
+    digitalWrite(lfCLK,HIGH);
+    digitalWrite(rfCLK,HIGH);
+    delayMicroseconds(500);
+    digitalWrite(rrCLK,LOW);
+    digitalWrite(lrCLK,LOW);
+    digitalWrite(lfCLK,LOW);
+    digitalWrite(rfCLK,LOW);
+    delayMicroseconds(500);
+  }
+}
+
+void moveForward(int steps)
+{
+  digitalWrite(lfCW, 0);
+  digitalWrite(rfCW, 1);
+  digitalWrite(lrCW, 0);
+  digitalWrite(rrCW, 1);
+  motorMove(steps);
+}
+
+void moveLeft(int steps)
+{
+  digitalWrite(lfCW, 0);
+  digitalWrite(rfCW, 0);
+  digitalWrite(lrCW, 1);
+  digitalWrite(rrCW, 1);
+  motorMove(steps);  
+}
+
+void moveRight(int steps)
+{
+  digitalWrite(lfCW, 1);
+  digitalWrite(rfCW, 1);
+  digitalWrite(lrCW, 0);
+  digitalWrite(rrCW, 0);
+  motorMove(steps);  
+}
+
+void moveBackward(int steps)
+{
+  digitalWrite(lfCW, 1);
+  digitalWrite(rfCW, 0);
+  digitalWrite(lrCW, 1);
+  digitalWrite(rrCW, 0);
+  motorMove(steps);  
+}
+
+void turnLeft(int steps)
+{
+  digitalWrite(lfCW, 1);
+  digitalWrite(rfCW, 1);
+  digitalWrite(lrCW, 1);
+  digitalWrite(rrCW, 1);
+  motorMove(steps);   
+}
+
+void turnRight(int steps)
+{
+  digitalWrite(lfCW, 0);
+  digitalWrite(rfCW, 0);
+  digitalWrite(lrCW, 0);
+  digitalWrite(rrCW, 0);
+  motorMove(steps); 
+}
+
+void setup(){ 
+
+  // 左前方电机使能
+  pinMode(lfCLK,OUTPUT);
+  pinMode(lfCW,OUTPUT);
+  pinMode(lfEN,OUTPUT);
+  digitalWrite(lfEN,LOW);//电机使能
+  
+  // 右前方电机使能
+  pinMode(rfCLK,OUTPUT);
+  pinMode(rfCW,OUTPUT);
+  pinMode(rfEN,OUTPUT);
+  digitalWrite(rfEN,LOW);//电机使能
+   
+  // 右后方电机使能
+  pinMode(rrCLK,OUTPUT);
+  pinMode(rrCW,OUTPUT);
+  pinMode(rrEN,OUTPUT);
+  digitalWrite(rrEN,LOW);//电机使能
+  
+  // 左后方电机使能
+  pinMode(lrCLK,OUTPUT);
+  pinMode(lrCW,OUTPUT);
+  pinMode(lrEN,OUTPUT);
+  digitalWrite(lrEN,LOW);
+    //put your setup code here, to run once: 
+    myservocatch.attach(SERVO_PINcatch);    // 将10引脚与声明的舵机对象连接起来
+    myservo1.attach(SERVO_PIN1);
+    myservo2.attach(SERVO_PIN2);
+    myservo3.attach(SERVO_PIN3);
+    myservo4.attach(SERVO_PIN4);
+    myservoground.attach(SERVO_PINground);
+    
+    Serial.begin(9600);
+    Serial1.begin(9600);
+    Serial.println("Please input serial data.");
+    delay(2000);
+    normalstate();
+}
+
+int angleFlag = 0;
+int control;
+int servoNumber;
+
+void loop()
+{ 
+  if(Serial1.available())
+  {
+    control = Serial1.read();
+    if(angleFlag == 1) // 此时要改变角度
+    {
+      switch(servoNumber)
+      {
+        case 0:
+          catchControl(control);
+          break;
+        case 1:
+          myservo1control(control);
+          break;
+        case 2:
+          myservo2control(control);
+          break;
+        case 3:
+          myservo3control(control);
+          break;
+        case 4:
+          myservo4control(control);
+          break;
+        case 5:
+          myservogroundcontrol(control);
+          break;
+      }
+      angleFlag = 0;
+    }
+    else
+    {
+      if(control >= 'A')
+      {
+        switch(control) 
+        {
+          case 'A':
+            turnLeft(500);
+            break;
+          case 'B':
+            turnRight(500);
+            break;
+          case 'G':
+            moveForward(500);
+            break;
+          case 'H':
+            moveLeft(500);
+            break;
+          case 'J':
+            moveRight(500);
+            break;
+          case 'K':
+            moveBackward(500);
+            break;    
+        }
+      }
+      else
+      {
+        servoNumber = control;
+        angleFlag = 1;
+      }
+    }
+  }
+} 

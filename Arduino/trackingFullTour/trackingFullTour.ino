@@ -387,8 +387,6 @@ void moveRightToLine()
   }
 }
 
-void 
-
 //void turnRightToLine()
 //{
 //  turnRight(1600);
@@ -514,23 +512,10 @@ void moveForwardOnTrack(int steps)
       moveRight(2);
       delay(10);
     }
-//    while((digitalRead(fTrack1) == HIGH && digitalRead(fTrack2) == LOW) 
-//        ||(digitalRead(bTrack3) == HIGH && digitalRead(bTrack2) == LOW))
-//    {
-//      turnLeft(2);
-//      moveLeft(2);
-//      delay(10);
-//    }
-//    while(digitalRead(fTrack3) == HIGH || digitalRead(bTrack1) == HIGH)
-//    {
-//      turnRight(2);
-//      moveRight(2);
-//      delay(10);
-//    }
   }
 }
 
-void normalstate()
+void normalState()
 {
   pwmServoControl(myServo1,25,106);
   pwmServoControl(myServo2,25,58);
@@ -540,13 +525,25 @@ void normalstate()
   catchon();                         
 }
 
-
 void scanState()
 {
-  pwmServoControl(myServo5, 94, 33);
-  pwmServoControl(myServo2, 58, 160);
+  catchon();
+  pwmServoControl(myServo5, 94, 28);
+  pwmServoControl(myServo2, 58, 82);
   pwmServoControl(myServo3, 25, 80);
   pwmServoControl(myServo4, 0, 85);
+}
+
+void scanQRCode()
+{
+  Serial2.print("qrcode");
+  while(true)
+  {
+    if(Serial2.available())
+    {
+      Serial1.print(Serial2.read());
+    }
+  }
 }
 
 void setup() {
@@ -556,7 +553,6 @@ void setup() {
   myServo3.attach(SERVO_PIN3);
   myServo4.attach(SERVO_PIN4);
   myServo5.attach(SERVO_PINground);
-//
   normalState();
 
   // 左前方电机使能
@@ -583,6 +579,7 @@ void setup() {
   for(int i = 22; i <= 33; ++i)
     pinMode(i, INPUT);
   Serial1.begin(9600);
+  Serial2.begin(9600);
 
   // 前进，使横向中线对齐
   moveForwardToLine();
@@ -594,13 +591,13 @@ void setup() {
   turnRightToLine();
   delay(500);
 
-  moveForwardOnTrack(4100);
+  moveForwardOnTrack(4200);
   delay(500);
 
   scanState();
   delay(500);
 
-  //scanQRCode();
+  scanQRCode();
   
 //
 //  // 前进，直到到达二维码的位置

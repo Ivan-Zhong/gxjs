@@ -3,7 +3,7 @@ from pyb import UART
 
 sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
-sensor.set_framesize(sensor.QVGA)
+sensor.set_framesize(sensor.VGA)
 sensor.skip_frames(time = 2000)
 sensor.set_auto_gain(False) # must turn this off to prevent image washout...
 clock = time.clock()
@@ -57,19 +57,26 @@ def reachForTarget(color):
 order1 = [];
 order2 = [];
 
+
 while(True):
     clock.tick()                    # Update the FPS clock.
     img = sensor.snapshot()         # Take a picture and return the image.
     if(uart.any()):
         message = uart.read().decode('utf-8')
-        print(message)
         if(message == 'qrcode'):
             order1Str, order2Str = scanQRCode().split('+');
-            order1 = list(map(lambda x: int(x), list(order1Str)))
-            order2 = list(map(lambda x: int(x), list(order2Str)))
-            print("order1: {}".format(order1))
-            print("order2: {}".format(order2))
-            # uart.write('')
+            #order1 = list(map(lambda x: int(x), list(order1Str)))
+            #order2 = list(map(lambda x: int(x), list(order2Str)))
+            order1 = list(order1Str)
+            order2 = list(order2Str)
+            #print("order1: {}".format(order1))
+            #print("order2: {}".format(order2))
+            uart.write(order1[0])
+            uart.write(order1[1])
+            uart.write(order1[2])
+            uart.write(order2[0])
+            uart.write(order2[1])
+            uart.write(order2[2])
         elif(message == 'findColor'):
             for i in order1:
 

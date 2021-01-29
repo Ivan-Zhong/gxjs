@@ -5,6 +5,10 @@ void setup() {
 }
 
 void loop() {
+  if(Serial2.available())
+  {
+    Serial.print(Serial2.read());
+  }
   Serial2.print("hasdfhas");
   delay(1000);
 }

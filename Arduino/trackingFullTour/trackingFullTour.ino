@@ -253,7 +253,7 @@ void moveForwardToLine()
     }
   }
   while((digitalRead(lTrack2) == LOW) && (digitalRead(rTrack2) == LOW))
-    moveForward(2);
+    moveForward(10);
   delay(200);
   if(digitalRead(lTrack2) == LOW && digitalRead(rTrack2) == HIGH)
     horzCorrect(1);
@@ -534,26 +534,26 @@ void scanState()
   pwmServoControl(myServo4, 0, 85);
 }
 
-void scanQRCode()
-{
-  Serial2.print("qrcode");
-  while(true)
-  {
-    if(Serial2.available())
-    {
-      Serial1.print(Serial2.read());
-    }
-  }
-}
+//void scanQRCode()
+//{
+//  Serial2.print("qrcode");
+//  while(true)
+//  {
+//    if(Serial2.available())
+//    {
+//      Serial1.print(Serial2.read());
+//    }
+//  }
+//}
 
 void setup() {
+  delay(1000);
   myServo0.attach(SERVO_PINcatch);    // 将10引脚与声明的舵机对象连接起来
   myServo1.attach(SERVO_PIN1);
   myServo2.attach(SERVO_PIN2);
   myServo3.attach(SERVO_PIN3);
   myServo4.attach(SERVO_PIN4);
   myServo5.attach(SERVO_PINground);
-  normalState();
 
   // 左前方电机使能
   pinMode(lfCLK,OUTPUT);
@@ -579,7 +579,9 @@ void setup() {
   for(int i = 22; i <= 33; ++i)
     pinMode(i, INPUT);
   Serial1.begin(9600);
-  Serial2.begin(9600);
+  // Serial2.begin(9600);
+
+  normalState();
 
   // 前进，使横向中线对齐
   moveForwardToLine();
@@ -597,8 +599,8 @@ void setup() {
   scanState();
   delay(500);
 
-  scanQRCode();
-  
+  //scanQRCode();
+    
 //
 //  // 前进，直到到达二维码的位置
 //  moveForwardOnTrack(10000);
@@ -619,9 +621,6 @@ void setup() {
   // 循环三次，每次从物料区到粗加工区，除最后一次外都回来
 
   // 右移 去扫码
-
-  // 左移 到粗加工区
-
   // 循环三次 从粗加工区到半成品区 除最后一次外都回来
 
   // 后退 达到结束区
@@ -631,6 +630,7 @@ void setup() {
 }
 
 void loop() {
+
   
 
 }

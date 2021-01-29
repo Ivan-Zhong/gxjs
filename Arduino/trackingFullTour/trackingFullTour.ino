@@ -534,17 +534,17 @@ void scanState()
   pwmServoControl(myServo4, 0, 85);
 }
 
-//void scanQRCode()
-//{
-//  Serial2.print("qrcode");
-//  while(true)
-//  {
-//    if(Serial2.available())
-//    {
-//      Serial1.print(Serial2.read());
-//    }
-//  }
-//}
+void scanQRCode()
+{
+  Serial2.print("qrcode");
+  while(true)
+  {
+    if(Serial2.available())
+    {
+      Serial1.print(Serial2.read());
+    }
+  }
+}
 
 void setup() {
   delay(1000);
@@ -578,8 +578,8 @@ void setup() {
   // 循迹模块初始化
   for(int i = 22; i <= 33; ++i)
     pinMode(i, INPUT);
-  Serial1.begin(9600);
-  // Serial2.begin(9600);
+  Serial1.begin(9600); // 蓝牙
+  Serial2.begin(9600); // openmv
 
   normalState();
 
@@ -599,7 +599,7 @@ void setup() {
   scanState();
   delay(500);
 
-  //scanQRCode();
+  scanQRCode();
     
 //
 //  // 前进，直到到达二维码的位置
